@@ -12,7 +12,10 @@ services:
       MYSQL_ROOT_PASSWORD: der432DGQDYe4fgdRd
     volumes:
        - ./data:/var/lib/mysql
-
+    deploy:
+      mode: replicated
+      replicas: 2
+      
   cache:
     image: redis:6.2
     restart: always
@@ -25,7 +28,10 @@ services:
       - REDIS_HOSTS=local:redis:6379
       - HTTP_USER=root
       - HTTP_PASSWORD=123
-
+    deploy:
+      mode: replicated
+      replicas: 2
+      
   nginx:
     image: nginx
     restart: always
@@ -36,6 +42,10 @@ services:
       - node
     volumes:
       - ./cfg:/etc/nginx/conf.d
+    deploy:
+      mode: replicated
+      replicas: 1
+      
   php:
     build:
       context: ./php
@@ -48,7 +58,10 @@ services:
       - cache
     volumes:
       - ./back/public:/var/www/html
-
+    deploy:
+      mode: replicated
+      replicas: 1
+      
   node:
     image: node:bookworm
     user: "node"
@@ -62,7 +75,9 @@ services:
     volumes:
       - ./front/build:/home/node/app
     command: "node app.js"
- 
+    deploy:
+      mode: replicated
+      replicas: 1
 volumes:
   redis:
   redis-config:
